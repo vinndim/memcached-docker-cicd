@@ -1,0 +1,23 @@
+# Общие настройки приложения
+appName: memcached-legacy
+replicaCount: 2
+
+# Настройки Docker-образа, который мы собрали
+image:
+  repository: memcached-legacy
+  tag: "1.0"
+
+# Сетевые настройки
+service:
+  type: ClusterIP
+  port: 11211
+  targetPort: 11211
+
+# Ограничения по ресурсам (для демонстрации оркестрации преподавателю)
+resources:
+  limits:
+    cpu: "200m"
+    memory: "128Mi"
+  requests:
+    cpu: "100m"
+    memory: "64Mi"

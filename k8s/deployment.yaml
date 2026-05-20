@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memcached-legacy
+  labels:
+    app: memcached
+spec:
+  replicas: 2 # Запускаем 2 копии для отказоустойчивости
+  selector:
+    matchLabels:
+      app: memcached
+  template:
+    metadata:
+      labels:
+        app: memcached
+    spec:
+      containers:
+      - name: memcached
+        image: memcached-legacy:1.0
+        ports:
+        - containerPort: 11211
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
+          requests:
+            cpu: "100m"
+            memory: "64Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: memcached-service
+spec:
+  selector:
+    app: memcached
+  ports:
+    - protocol: TCP
+      port: 11211
+      targetPort: 11211
+  type: ClusterIP # Внутренний сетевой доступ

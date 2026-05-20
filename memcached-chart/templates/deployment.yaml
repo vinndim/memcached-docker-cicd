@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-memcached
+  labels:
+    app: {{ .Values.appName }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+    spec:
+      containers:
+      - name: memcached
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: {{ .Values.service.targetPort }}
+        resources:
+          limits:
+            cpu: "{{ .Values.resources.limits.cpu }}"
+            memory: "{{ .Values.resources.limits.memory }}"
+          requests:
+            cpu: "{{ .Values.resources.requests.cpu }}"
+            memory: "{{ .Values.resources.requests.memory }}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-service
+spec:
+  selector:
+    app: {{ .Values.appName }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+  type: {{ .Values.service.type }}

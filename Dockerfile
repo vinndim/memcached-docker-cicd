@@ -1,5 +1,4 @@
 # --- ЭТАП 1: Сборка (Build Stage) ---
-# Используем стабильный образ Debian для компиляции
 FROM debian:bookworm-slim AS builder
 
 # Передаем опции конфигурации
